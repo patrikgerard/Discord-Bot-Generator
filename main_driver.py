@@ -10,13 +10,13 @@ import secret_info
 import random
 
 # TOKEN = secret_info.TOKEN
-TOKEN = secret_info.OJ_TOKEN
+TOKEN = secret_info.TOKEN
 # CHANNEL_ID = secret_info.CHANNEL_ID
-CHANNEL_ID = secret_info.CUZ_CHANNEL_ID
+CHANNEL_ID = secret_info.CHANNEL_ID
 error_message_bad_command = "Command doesn't fit. You must acquit!"
 error_message_did_something_wrong = "Oh my God, Nicole is killed? Oh my God, she is dead? The errors in your command killed her?"
 # GUILD_ID = secret_info.GUILD_ID
-GUILD_ID = secret_info.CUZ_GUILD_ID
+GUILD_ID = secret_info.GUILD_ID
 MARK_ID = secret_info.MARK_ID
 PATRICK_ADMIN_ID = secret_info.PATRICK_ADMIN_ID
 guilty_message = "I'm absolutely, l00 percent, not guilty."
