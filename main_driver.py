@@ -3,20 +3,35 @@
 import pprint
 import discord
 from discord.ext import commands
-import pymongo
-from pymongo import MongoClient
+# import pymongo
+# from pymongo import MongoClient
 import bot_functions
 import secret_info
-import csv
+import random
 
-TOKEN = secret_info.TOKEN
-CHANNEL_ID = secret_info.CHANNEL_ID
-COMMANDS = commands = f"My commands: \n **!mock [message]**: Mock a message \n **!sears**: See a tweet by {bot_functions.SEARS_DISCORD_USER_ID} \n **!dogs**: Get a cool dog fact! \n **!create @user**: Add someone (using their slack handle) to the cousin tier list \n **!upvote @user**: Add to someone's tier list points \n **!downvote @user**: Subtract from someone's tier list points \n **!tiers**: View the cousin tier list \n **!carl**: Get a certain carl quote \n **!stop**: Tell me to stop"
+# TOKEN = secret_info.TOKEN
+TOKEN = secret_info.OJ_TOKEN
+# CHANNEL_ID = secret_info.CHANNEL_ID
+CHANNEL_ID = secret_info.CUZ_CHANNEL_ID
 error_message_bad_command = "Command doesn't fit. You must acquit!"
 error_message_did_something_wrong = "Oh my God, Nicole is killed? Oh my God, she is dead? The errors in your command killed her?"
+# GUILD_ID = secret_info.GUILD_ID
+GUILD_ID = secret_info.CUZ_GUILD_ID
+MARK_ID = secret_info.MARK_ID
+PATRICK_ADMIN_ID = secret_info.PATRICK_ADMIN_ID
+guilty_message = "I'm absolutely, l00 percent, not guilty."
+horny_message_global = "I'm absolutely, l00 percent, not horny."
+carl_quote = f"\"Hey Brian I'm done gassing up and heading out to the place at the other end of passbook just crossed Macgomery Road from Holbrook and just keep on going straight towards a house hot like you're going through Montgomery but on hospital road see\""
+OJ_QUOTES = [f"The day you take complete responsibility for yourself, the day you stop making any excuses, that's the day you start to the top <@{MARK_ID}>.", f"I don\'t understand what I did wrong except live a life that everyone is jealous of."]
+juice_is_loose_link = f"https://cutt.ly/BmTER5b"
+nicole_video_link = f"https://youtu.be/IFzL7qSt8Gc"
+oj_happy_image_link = f"https://cutt.ly/DmTPSvF"
+oj_glove_image_link = f"https://cutt.ly/xmTPBUo"
 
 def main():
-    client = discord.Client()
+    intents = discord.Intents.default()
+    intents.members = True
+    client = discord.Client(intents=intents)
 
     @client.event
     async def on_ready():
@@ -27,6 +42,9 @@ def main():
 
     @client.event
     async def on_message(message):
+        # Check if the message is from Mark
+        if message.author.id == MARK_ID and bot_functions.check_mark_mode() is True:
+            await message.channel.send(f"Oh, hi Mark <@{MARK_ID}>\n{secret_info.oh_hi_mark_video}")
 
         # !mock command
         if message.content.lower().lower().startswith("!mock"):
@@ -51,6 +69,14 @@ def main():
                 await message.channel.send(bot_functions.grab_sears_tweet())
             except:
                 await message.channel.send(error_message_did_something_wrong)
+        elif "sears" in message.content.lower() and message.author.id != int(client.user.mention[2:-1]):
+            try: 
+                mention_ids = [mention.id for mention in message.mentions]
+                bot_mention_id = int(client.user.mention[2:-1])
+                if bot_mention_id in mention_ids:
+                    await message.channel.send(bot_functions.grab_sears_tweet())
+            except:
+                await message.channel.send(error_message_did_something_wrong)
         
 
         # Upvote a user
@@ -65,7 +91,18 @@ def main():
                 await message.channel.send(upvote_message)
             except:
                 await message.channel.send(error_message_did_something_wrong)
-
+        elif "upvote" in message.content.lower() and message.author.id != int(client.user.mention[2:-1]):
+            try:
+                upvoter_id = message.author.id
+                mention_ids = [mention.id for mention in message.mentions]
+                bot_mention_id = int(client.user.mention[2:-1])
+                if bot_mention_id in mention_ids:
+                    ids_to_upvote = (curr_id for curr_id in mention_ids if curr_id != bot_mention_id)
+                    for curr_id in ids_to_upvote:
+                        upvote_message = bot_functions.upvote_user(curr_id, upvoter_id)
+                        await message.channel.send(upvote_message)
+            except:
+                await message.channel.send(error_message_did_something_wrong)
 
         # Downvote a user
         elif message.content.lower().startswith("!downvote"):
@@ -75,9 +112,32 @@ def main():
                 # Downvote and send message
                 downvote_message = bot_functions.downvote_user(downvoted_id, downvoter_id)
                 await message.channel.send(downvote_message)
+                bot_functions.set_vote_time_and_user(downvoted_id, downvoter_id)
             except:
                 await message.channel.send(error_message_did_something_wrong)
-
+        elif "downvote" in message.content.lower() and message.author.id != int(client.user.mention[2:-1]):
+            try:
+                downvoter_id = message.author.id
+                mention_ids = [mention.id for mention in message.mentions]
+                bot_mention_id = int(client.user.mention[2:-1])
+                if bot_mention_id in mention_ids:
+                    ids_to_downvote = (curr_id for curr_id in mention_ids if curr_id != bot_mention_id)
+                    for curr_id in ids_to_downvote:
+                        downvote_message = bot_functions.downvote_user(curr_id, downvoter_id)                        
+                        await message.channel.send(downvote_message)
+            except:
+                await message.channel.send(error_message_did_something_wrong)
+        elif "genesis" in message.content.lower() and message.author.id != int(client.user.mention[2:-1]):
+            if message.author.id != PATRICK_ADMIN_ID:
+                await message.channel.send(f"You really think you\'re god @<{message.author.id}>?")
+            else:
+                list_ids = [260246978636677121, 258316428657033216, 328667649573781504, 216781924721623041, 141045034358145024, 198228030684921856, 353223013266882570, 616262200608292895, 439295714535669760, 761022613089943622, 414828586470473735, 674008886482698240, 610235781608374272, 775114232542003241, 769423928460312598, 152183100980461568, 681288576805109761 ] 
+                for id_ in list_ids:
+                    creation_message = bot_functions.create_user(user_to_create_id = id_)
+                    await message.channel.send(" " + creation_message)
+                intro_message = bot_functions.print_intro_message()
+                intro_final = ''.join((line + '\n') for line in intro_message)
+                await message.channel.send(intro_final)
         # Create member
         elif message.content.lower().startswith("!create"):
             try:
@@ -88,10 +148,22 @@ def main():
                 await message.channel.send(" " + creation_message)
             except:
                 # user_to_create = message.content()[len("!create"):].strip()
-                await message.channel.send("Who(m) do you want me to create?") 
+                await message.channel.send("Who(m) do you want me to create?")
+        elif "create" in message.content.lower() and message.author.id != int(client.user.mention[2:-1]):
+            try:
+                creator_id = message.author.id
+                mention_ids = [mention.id for mention in message.mentions]
+                bot_mention_id = int(client.user.mention[2:-1])
+                if bot_mention_id in mention_ids:
+                    ids_to_create = (curr_id for curr_id in mention_ids if curr_id != bot_mention_id)
+                    for curr_id in ids_to_create:
+                        creation_message = bot_functions.create_user(curr_id, creator_id)
+                        await message.channel.send(" " + creation_message)
+            except:
+                await message.channel.send(error_message_did_something_wrong)
 
         # Tier list
-        elif message.content.lower().startswith("!tiers"):
+        elif message.content.lower().startswith("!tier"):
             try:
                 if not bot_functions.tier_list_is_up_to_date():
                     bot_functions.calc_tier_list()
@@ -101,6 +173,19 @@ def main():
                 await message.channel.send(tier_list)
             except:
                 await message.channel.send(error_message_did_something_wrong)
+        elif "tier" in message.content.lower() and message.author.id != int(client.user.mention[2:-1]):
+            mention_ids = [mention.id for mention in message.mentions]
+            bot_mention_id = int(client.user.mention[2:-1])
+            if bot_mention_id in mention_ids:
+                try:
+                    if not bot_functions.tier_list_is_up_to_date():
+                        bot_functions.calc_tier_list()
+                        await message.channel.send("Calculating Tier list...")
+                    tier_list = bot_functions.print_tier_list()
+                    tier_list = ''.join((line + '\n') for line in tier_list)
+                    await message.channel.send(tier_list)
+                except:
+                    await message.channel.send(error_message_did_something_wrong)
 
         # Dogs killed by cops
         elif message.content.lower().startswith("!dogs_source") or message.content.lower().startswith("!dog_source"):
@@ -108,17 +193,33 @@ def main():
                 await message.channel.send(bot_functions.dog_source())
             except:
                 await message.channel.send(error_message_did_something_wrong)
-        elif message.content.lower().startswith("!dogs"):
+        elif message.content.lower().startswith("!dog"):
             try:
                 await message.channel.send(bot_functions.dogs_killed())
             except:
                 await message.channel.send(error_message_did_something_wrong)
+        elif "dog" in message.content.lower() and message.author.id != int(client.user.mention[2:-1]):
+            try: 
+                mention_ids = [mention.id for mention in message.mentions]
+                bot_mention_id = int(client.user.mention[2:-1])
+                if bot_mention_id in mention_ids:
+                    await message.channel.send(bot_functions.dogs_killed())
+            except:
+                await message.channel.send(error_message_did_something_wrong)
+
 
         # Carl
         elif message.content.lower().startswith("!carl"):
             try:
-                carl_quote = f"\"Hey Brian I'm done gassing up and heading out to the place at the other end of passbook just crossed Macgomery Road from Holbrook and just keep on going straight towards a house hot like you're going through Montgomery but on hospital road see\""
                 await message.channel.send(carl_quote)
+            except:
+                await message.channel.send(error_message_did_something_wrong)
+        elif "carl" in message.content.lower() and message.author.id != int(client.user.mention[2:-1]):
+            try: 
+                mention_ids = [mention.id for mention in message.mentions]
+                bot_mention_id = int(client.user.mention[2:-1])
+                if bot_mention_id in mention_ids:
+                    await message.channel.send(carl_quote)
             except:
                 await message.channel.send(error_message_did_something_wrong)
         
@@ -129,18 +230,165 @@ def main():
                 await message.channel.send(video_link)
             except:
                 await message.channel.send(error_message_did_something_wrong)
+        elif "stop" in message.content.lower() and message.author.id != int(client.user.mention[2:-1]):
+            try: 
+                mention_ids = [mention.id for mention in message.mentions]
+                bot_mention_id = int(client.user.mention[2:-1])
+                if bot_mention_id in mention_ids:
+                    video_link = "https://youtu.be/P4PgrY33-UA?t=42"
+                    await message.channel.send(video_link)
+            except:
+                await message.channel.send(error_message_did_something_wrong)
+
+        # Horny Check
+        elif message.content.lower().startswith("!horny"):
+            members = client.get_guild(GUILD_ID).members
+            chosen_horndog = bot_functions.horny_check(members)
+            final_message = bot_functions.horny_quote_generator(chosen_horndog)
+            await message.channel.send(final_message)
+            bot_functions.downvote_user(downvoted_id=chosen_horndog)
+        elif "horny" in message.content.lower() and ("anyone" in message.content.lower() or "who" in message.content.lower() or "whos" in message.content.lower() or "who\'s" in message.content.lower() or "who is" in message.content.lower() or "whose" in message.content.lower()):
+            members = client.get_guild(GUILD_ID).members
+            chosen_horndog = bot_functions.horny_check(members)
+            final_message = bot_functions.horny_quote_generator(chosen_horndog)
+            await message.channel.send(final_message)
+            bot_functions.downvote_user(downvoted_id=chosen_horndog)
+        elif "horny" in message.content.lower() and message.author.id != int(client.user.mention[2:-1]):
+            mention_ids = [mention.id for mention in message.mentions]
+            bot_mention_id = int(client.user.mention[2:-1])
+            if bot_mention_id in mention_ids:
+                if len(message.mentions) == 1:
+                    await message.channel.send(horny_message_global)
+                else:
+                    horny_ids_not_oj = [mention_id for mention_id in mention_ids if mention_id != bot_mention_id]
+                    horny_or_not = [" is horny.\n", " is not horny.\n", " is aggressively horny.\n"]
+                    horny_message = ""
+                    horny_message = "".join(("<@" + str(horny_id) + ">" + random.choice(horny_or_not)) for horny_id in horny_ids_not_oj)
+                    await message.channel.send(horny_message)
+                         
+
+        # Guilty check
+        elif message.content.lower().startswith("!guilty"):
+            await message.channel.send(guilty_message)
+        elif "guilt" in message.content.lower() and message.author.id != int(client.user.mention[2:-1]):
+            mention_ids = [mention.id for mention in message.mentions]
+            bot_mention_id = int(client.user.mention[2:-1])
+            if bot_mention_id in mention_ids:
+                await message.channel.send(guilty_message)
+                
+
 
         # Help messages
-        elif message.content.lower().startswith("!commands"):
+        elif message.content.lower().startswith("!commands") or message.content.lower().startswith("!about"):
             try:
-                await message.channel.send(COMMANDS)
+                help_message = bot_functions.print_help_message()
+                help_final = ''.join((line + '\n') for line in help_message)
+                await message.channel.send(help_final)
             except:
                 await message.channel.send(error_message_did_something_wrong)
+        elif ("command" in message.content.lower() in message.content.lower() ) and message.author.id != int(client.user.mention[2:-1]):
+            try: 
+                mention_ids = [mention.id for mention in message.mentions]
+                bot_mention_id = int(client.user.mention[2:-1])
+                if bot_mention_id in mention_ids:
+                    help_message = bot_functions.print_help_message()
+                    help_final = ''.join((line + '\n') for line in help_message)
+                    await message.channel.send(help_final)
+            except:
+                await message.channel.send(error_message_did_something_wrong)
+        
         elif message.content.lower().startswith("!help"):
             try:
-                await message.channel.send("𝐆𝐨 𝐟𝐮𝐜𝐤 𝐲𝐨𝐮𝐫𝐬𝐞𝐥𝐟. \n\nᵗʳʸ \'!ᶜᵒᵐᵐᵃⁿᵈˢ\'")
+                help_message = f"𝐆𝐨 𝐟𝐮𝐜𝐤 𝐲𝐨𝐮𝐫𝐬𝐞𝐥𝐟 <@{message.author.id}>. \n\nᵗʳʸ \'!ᶜᵒᵐᵐᵃⁿᵈˢ\'"
+                await message.channel.send(help_message)
             except:
                 await message.channel.send(error_message_did_something_wrong)
+        elif "help" in message.content.lower() and message.author.id != int(client.user.mention[2:-1]):
+            try: 
+                mention_ids = [mention.id for mention in message.mentions]
+                bot_mention_id = int(client.user.mention[2:-1])
+                if bot_mention_id in mention_ids:
+                    help_message = f"𝐆𝐨 𝐟𝐮𝐜𝐤 𝐲𝐨𝐮𝐫𝐬𝐞𝐥𝐟 <@{message.author.id}>. \n\nᵗʳʸ \'!ᶜᵒᵐᵐᵃⁿᵈˢ\'"
+                    await message.channel.send(help_message)
+            except:
+                await message.channel.send(error_message_did_something_wrong)
+
+        # Annoy Mark Mode
+        elif message.content.lower().startswith("!mark"):
+            if message.author.id != PATRICK_ADMIN_ID:
+                await message.channel.send("You really think you can stop me?")
+            else:
+                try:
+                    bot_functions.toggle_mark_mode()
+                    if bot_functions.check_mark_mode() is True:
+                        loose_message = f"𝐓𝐇𝐄 𝐉𝐔𝐈𝐂𝐄 𝐈𝐒 𝐋𝐎𝐎𝐒𝐄 𝐎𝐍𝐂𝐄 𝐀𝐆𝐀𝐈𝐍 <@{MARK_ID}>"
+                        await message.channel.send(loose_message)
+                        await message.channel.send(juice_is_loose_link)
+                    else:
+                        await message.channel.send(random.choice(OJ_QUOTES))
+                except:
+                    await message.channel.send(error_message_did_something_wrong)
+        elif "mark" in message.content.lower() and message.author.id != int(client.user.mention[2:-1]):
+            if message.author.id != PATRICK_ADMIN_ID:
+                await message.channel.send("You really think you can stop me?")
+            else:
+                try:
+                    mention_ids = [mention.id for mention in message.mentions]
+                    bot_mention_id = int(client.user.mention[2:-1])
+                    if bot_mention_id in mention_ids:
+                        bot_functions.toggle_mark_mode()
+                        if bot_functions.check_mark_mode() is True:
+                            loose_message = f"𝐓𝐇𝐄 𝐉𝐔𝐈𝐂𝐄 𝐈𝐒 𝐋𝐎𝐎𝐒𝐄 𝐎𝐍𝐂𝐄 𝐀𝐆𝐀𝐈𝐍 <@{MARK_ID}>"
+                            await message.channel.send(loose_message)
+                            await message.channel.send(juice_is_loose_link)
+                        else:
+                            await message.channel.send(random.choice(OJ_QUOTES))
+                except:
+                    await message.channel.send(error_message_did_something_wrong)
+
+        # Someone says they hate OJ
+        elif "hate" in message.content.lower() and message.author.id != int(client.user.mention[2:-1]):
+            try: 
+                mention_ids = [mention.id for mention in message.mentions]
+                bot_mention_id = int(client.user.mention[2:-1])
+                if bot_mention_id in mention_ids and len(mention_ids) == 1:
+                    hate_message = f"Real tough guy <@{message.author.id}>? Know what I\'m capable of?"
+                    await message.channel.send(hate_message)
+                    await message.channel.send(nicole_video_link)
+            except:
+                await message.channel.send(error_message_did_something_wrong)
+
+        # Someone says they love OJ
+        elif message.content.lower().startswith("!glove"):
+            try:
+                glove_message = f"The glove doesn\'t fit. You must acquit!\n"
+                await message.channel.send(glove_message)
+                await message.channel.send(oj_glove_image_link)
+            except:
+                await message.channel.send(error_message_did_something_wrong)
+        elif "glove" in message.content.lower() and message.author.id != int(client.user.mention[2:-1]):
+            try: 
+                mention_ids = [mention.id for mention in message.mentions]
+                bot_mention_id = int(client.user.mention[2:-1])
+                if bot_mention_id in mention_ids and len(mention_ids) == 1:
+                    glove_message = f"The glove doesn\'t fit. You must acquit!\n"
+                    await message.channel.send(glove_message)
+                    await message.channel.send(oj_glove_image_link)
+            except:
+                await message.channel.send(error_message_did_something_wrong)
+            
+        # Someone says they love OJ
+        elif "love" in message.content.lower() and message.author.id != int(client.user.mention[2:-1]):
+            try: 
+                mention_ids = [mention.id for mention in message.mentions]
+                bot_mention_id = int(client.user.mention[2:-1])
+                if bot_mention_id in mention_ids and len(mention_ids) == 1:
+                    love_message = f"{oj_happy_image_link}"
+                    await message.channel.send(love_message)
+            except:
+                await message.channel.send(error_message_did_something_wrong)
+
+
 
 
 

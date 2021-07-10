@@ -10,6 +10,8 @@ from pymongo import MongoClient
 from statistics import stdev
 import secret_info
 import csv
+import random
+import time
 
 CONSUMER_KEY = secret_info.CONSUMER_KEY
 CONSUMER_SECRET_KEY = secret_info.CONSUMER_SECRET_KEY
@@ -25,6 +27,12 @@ CONNECTION_URL = secret_info.CONNECTION_URL
 DOG_SOURCE = "https://www.criminallegalnews.org/news/2018/jun/16/doj-police-shooting-family-dogs-has-become-epidemic/"
 
 INFORMATION_FILE_NAME ="information.txt"
+ANNOY_MARK_FILE_NAME = "annoy_mark_mode.txt"
+epoch = datetime(1970,1,1)
+vote_refresh_time = 40
+republican_voting_url = "https://rb.gy/wih8jw"
+help_doc = "help.txt"
+intro_doc = "introduction.txt"
 
 # Mocks message
 def mock(message):
@@ -80,14 +88,16 @@ def create_user(user_to_create_id, creator_id=None):
 
     if collection.count_documents({"_id": user_to_create_id}) > 0:
         if creator_id is None:
-            return f"<@{user_to_create_is}> is already in rankings."
+            return f"<@{user_to_create_id}> is already in rankings."
         else:
             down_vote_message = downvote_user(downvoted_id=creator_id)
             return f"<@{user_to_create_id}> is already in  cousin rankings. Minus one point for you <@{creator_id}>."
-
+    current_time = int(current_time_in_seconds())
     post = {"_id": user_to_create_id,
      "points": 0,
-     "tier": "B"
+     "tier": "B",
+     "most_recent_vote_time": 0,
+     "last_user_voted_on": user_to_create_id
     }
     collection.insert_one(post)
     set_update_needed()
@@ -112,15 +122,27 @@ def upvote_user(upvoted_id, upvoter_id=None):
             upvote_message = upvote_user(upvoted_id = upvoted_id)
             return f"<@{upvoted_id}> was created and upvoted."
         
+        if upvoter_id != None:
+            # Get the time since last vote
+            last_vote = collection.find_one({'_id':upvoter_id})['most_recent_vote_time']
+            current_time = current_time_in_seconds()
+            time_since_last_vote = get_time_since_last_vote(current_time, last_vote)
+
+            # Get the last user voted on
+            last_user_voted_on = collection.find_one({'_id':upvoter_id})['last_user_voted_on']
+
+            # see if they can vote
+            voting_right = can_user_vote(last_user_voted_on, upvoted_id, time_since_last_vote)
+            if voting_right != True:
+                return f"Call me a Republican, because I\'m taking away your right to vote <@{upvoter_id}>.\n[Voting on the same person too quickly]"
+        
         # Add a point and update the database
         points = collection.find_one({'_id':upvoted_id})['points']
         points += 1
         # add point to tier list date_checker
         set_update_needed()
         collection.update_one({"_id":upvoted_id}, {"$set": {"points": points}}) 
-
-        # TODO: CALC TIER LIST AND TAKE POINT FROM DATE_CHECKER
-
+        set_vote_time_and_user(upvoted_id, upvoter_id)
         return f"<@{upvoted_id}> was upvoted."
 
 
@@ -136,19 +158,37 @@ def downvote_user(downvoted_id, downvoter_id=None):
         db = cluster["cousins"]
         collection = db["cousins_users"]
 
-        # check that the user is in the database
+        # Check if the account exists
         if collection.count_documents({"_id": downvoted_id}) != 1:
             user_created_message = create_user(user_to_create_id=downvoted_id)
             downvote_message = downvote_user(downvoted_id = downvoted_id)
             return f"<@{downvoted_id}> was created and downvoted."
+        
+        # Check if they can vote
+        if downvoter_id != None:
+            # Get the time since last vote
+            last_vote = collection.find_one({'_id':downvoter_id})['most_recent_vote_time']
+            current_time = current_time_in_seconds()
+            time_since_last_vote = get_time_since_last_vote(current_time, last_vote)
+
+            # Get the last user voted on
+            last_user_voted_on = collection.find_one({'_id':downvoter_id})['last_user_voted_on']
+
+            # see if they can vote
+            voting_right = can_user_vote(last_user_voted_on, downvoted_id, time_since_last_vote)
+            if voting_right != True:
+                return f"Call me a Republican, because I\'m taking away your right to vote <@{downvoter_id}>.\n[Voting on the same person too quickly]"
+        
+        # check that the user is in the database
+
         
         # Add a point and update the database
         points = collection.find_one({'_id':downvoted_id})['points']
         points -= 1
         # add point to tier list date_checker
         set_update_needed()
-        collection.update_one({"_id":downvoted_id}, {"$set": {"points": points}}) 
-
+        collection.update_one({"_id":downvoted_id}, {"$set": {"points": points}})
+        set_vote_time_and_user(downvoted_id, downvoter_id)
         return f"<@{downvoted_id}> was downvoted."
 
 def calc_tier_list():
@@ -175,9 +215,6 @@ def calc_tier_list():
     # info_collection.update_one({"_id":"update_info"}, {"$set": {"update_needed": 0}})
 
 
-
-
-
 def print_tier_list():
     # Loop through tier list
     cluster = MongoClient(CONNECTION_URL)
@@ -190,6 +227,16 @@ def print_tier_list():
             yield f" \t<@{member}> "
     pass
 
+def print_help_message():
+    lines = open(help_doc, encoding='utf-8').read().splitlines()
+    for line in lines:
+        yield line
+
+def print_intro_message():
+    lines = open(intro_doc, encoding='utf-8').read().splitlines()
+    for line in lines:
+        yield line
+
 def set_tier_up_to_date():
     reader = csv.reader(open(INFORMATION_FILE_NAME))
     lines = list(reader)
@@ -199,7 +246,7 @@ def set_tier_up_to_date():
     writer.writerows(lines)
 
 def tier_list_is_up_to_date():
-    with open ('information.txt', 'r') as csv_file:
+    with open (INFORMATION_FILE_NAME, 'r') as csv_file:
         line_reader = csv.reader(csv_file, delimiter=',')
         line_count = 0
         for row in csv_file:
@@ -215,12 +262,6 @@ def tier_list_is_up_to_date():
     # query = {"_id": "update_info"}
     # info = update_needed_collection.find_one(query)
     # return info["update_needed"] == 0
-
-# def set_update_needed():
-#     cluster = MongoClient(CONNECTION_URL)
-#     db = cluster["cousins"]
-#     info_collection = db["update_info"]
-#     info_collection.update_one({"_id":"update_info"}, {"$set": {"update_needed": 1}})
 
 
 def set_update_needed():
@@ -269,6 +310,15 @@ def map_to_tier_list(total_points, average_points, std_dev_points):
         collection_members.update_one({"_id":member["_id"]}, {"$set": {"tier": tier}})
 
 
+# Check who is the most horny
+def horny_check(members):
+    member_ids = [member.id for member in members]
+    return random.choice(member_ids)
+
+def horny_quote_generator(chosen_horndog):
+    choice = "<@" + str(chosen_horndog) + ">"
+    return "Mirror, mirror on the wall — " + choice + " is the horniest of them all.\nMinus one point for execessive horniness."
+
 def dog_source():
     return f"{DOG_SOURCE}"
 
@@ -287,10 +337,62 @@ def dogs_killed():
     seconds_since_year_start = (current_date - current_year).total_seconds() 
     dogs_killed_since_year_start = round(seconds_since_year_start/3600)
 
+    dog_quotes = ["Ruff world!", "Talk about puppy love!", "Man's best friend! Pig\'s worst enemy!"]
 
-    return f"There have been approximately {dogs_killed_since_year_start} dogs killed by cops this year. Ruff world!\n\nType \'!dogs_source\' for source."
-
-
-        
+    return f"There have been approximately {dogs_killed_since_year_start} dogs killed by cops this year. " + random.choice(dog_quotes) + "\n\nType \'!dogs_source\' for source."
 
 
+def current_time_in_seconds():
+    current_time = datetime.today()
+    time =  (current_time - epoch).total_seconds()
+    return time
+
+def get_time_since_last_vote(current_time, last_vote):
+    time = current_time - last_vote
+    return int(time)
+
+    
+def can_user_vote(last_user_voted_on, current_user_voted_on, time_since_last_vote):
+    if last_user_voted_on != current_user_voted_on:
+        return True
+    if (last_user_voted_on == current_user_voted_on) and  (time_since_last_vote <= vote_refresh_time):
+        return False
+    else:
+        return True 
+
+def set_vote_time_and_user(voted_id, voter_id):
+    current_time = int(current_time_in_seconds())
+    # time.sleep(10)
+    second_time = int(current_time_in_seconds())
+    cluster = MongoClient(CONNECTION_URL)
+    db = cluster["cousins"]
+    collection = db["cousins_users"]
+    # print("current time: " + str(current_time))
+    # time.sleep(10)
+    if voter_id != None:
+        collection.update_one({"_id":voter_id}, {"$set": {"last_user_voted_on":voted_id}})
+        collection.update_one({"_id":voter_id}, {"$set": {"most_recent_vote_time": current_time}})
+        vote_time = collection.find_one({'_id':voted_id})['most_recent_vote_time']
+        # print(f"Set_vote_time_and_user: {vote_time}")
+        # print(f"difference: {vote_time - current_time}")
+
+
+def toggle_mark_mode():
+    reader = csv.reader(open(ANNOY_MARK_FILE_NAME))
+    lines = list(reader)
+    if int(lines[1][0]) == 1:
+        lines[1][0] = 0
+    else:
+        lines[1][0] = 1
+    writer = csv.writer(open(ANNOY_MARK_FILE_NAME, "w"))
+    writer.writerows(lines)
+
+def check_mark_mode():
+    with open (ANNOY_MARK_FILE_NAME, 'r') as csv_file:
+        line_reader = csv.reader(csv_file, delimiter=',')
+        line_count = 0
+        for row in csv_file:
+            if line_count == 0:
+                line_count += 1
+            else:
+                return int(row[0]) == 1
