@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import asyncio
 import pprint
 import discord
 from discord.ext import commands
@@ -20,6 +21,7 @@ GUILD_ID = secret_info.CUZ_GUILD_ID
 MARK_ID = secret_info.MARK_ID
 SEARS_ID = secret_info.SEARS_ID
 PATRICK_ADMIN_ID = secret_info.PATRICK_ADMIN_ID
+CARL_ID = secret_info.CARL_ID
 guilty_message_global = "I'm absolutely, l00 percent, not guilty."
 horny_message_global = "I'm absolutely, l00 percent, not horny."
 carl_quote = f"\"Hey Brian I'm done gassing up and heading out to the place at the other end of passbook just crossed Macgomery Road from Holbrook and just keep on going straight towards a house hot like you're going through Montgomery but on hospital road see\""
@@ -31,7 +33,8 @@ oj_glove_image_link = f"https://cutt.ly/xmTPBUo"
 ford_bronco_links = ["https://static.onecms.io/wp-content/uploads/sites/20/2020/06/16/oj-simpson-bronco.jpg", "https://api.time.com/wp-content/uploads/2017/08/170810_white-ford-bronco.jpg?w=800&quality=85", "https://ca-times.brightspotcdn.com/dims4/default/c554689/2147483647/strip/true/crop/891x501+0+0/resize/840x472!/format/webp/quality/90/?url=https%3A%2F%2Fcalifornia-times-brightspot.s3.amazonaws.com%2F33%2Fd6%2F6dd098d16d9033ae12c724e9c9fd%2Fla-1560722644-ki1iohio46-snap-image"]
 calculating_messages = [f"Calculating tier list...", f"Beating my wife...", f"Murdering my wife...", f"Evading the authorities..."]
 oj_mad_link = f"https://cdn.vox-cdn.com/thumbor/fmaJOrr2EQNCj4SECstQ4t7xVa8=/1400x1400/filters:format(jpeg)/cdn.vox-cdn.com/uploads/chorus_asset/file/16108952/oj_simpson_38021484_2.jpg"
-
+dick_sucker_fact = f"It has been 4 hours since I successfully sucked my own penis. Things are different now. As soon as mouth-to-penis contact was made I felt a shockwave through my body. I have reason to believe I have super strength and telekinesis now.. 3 hours after contact I noticed a van parked on my street but no one has entered or exited the car since its arrival. I fear for my safety, I'm not sure what sort of power I may have stumbled upon but it's possible that the government has found out. If I don't update this again please send help"
+military_spending_link= f"https://media.nationalpriorities.org/uploads/discretionary_spending_pie%2C_2015_enacted.png"
 def main():
     intents = discord.Intents.default()
     intents.members = True
@@ -488,7 +491,11 @@ def main():
         elif message.content.lower().startswith("!bee"):
             try:
                 bee_fact = bot_functions.bee_facts()
-                await message.channel.send(bee_fact)
+                if bee_fact == dick_sucker_fact:
+                    bee_fact_final = f"{bee_fact} <@{CARL_ID}>"
+                    await message.channel.send(bee_fact_final)
+                else: 
+                    await message.channel.send(bee_fact)
             except:
                 await message.channel.send(error_message_did_something_wrong)
 
@@ -498,11 +505,27 @@ def main():
                 bot_mention_id = int(client.user.mention[2:-1])
                 if bot_mention_id in mention_ids and len(mention_ids) == 1:
                     bee_fact = bot_functions.bee_facts()
-                    await message.channel.send(bee_fact)
+                    if bee_fact == dick_sucker_fact:
+                        bee_fact_final = f"{bee_fact} <@{CARL_ID}>"
+                        await message.channel.send(bee_fact_final)
+                    else:
+                        await message.channel.send(bee_fact)
             except:
                 await message.channel.send(error_message_did_something_wrong)
 
-
+        elif  ((" modern" in message.content.lower() or " current" in message.content.lower()) and ("war" in message.content.lower() or "geopolitic" in message.content.lower())) and message.author.id != int(client.user.mention[2:-1]):
+            try: 
+                mention_ids = [mention.id for mention in message.mentions]
+                bot_mention_id = int(client.user.mention[2:-1])
+                if bot_mention_id in mention_ids and len(mention_ids) == 1:
+                    military_quote = f"Military–industrial complex go brrr"
+                    # if bee_fact == dick_sucker_fact:
+                    #     await message.channel.send(bee_fact, deleter_after=10)
+                    # else: 
+                    await message.channel.send(military_quote)
+                    await message.channel.send(military_spending_link)
+            except:
+                await message.channel.send(error_message_did_something_wrong)
 
 
 
