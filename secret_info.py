@@ -1,17 +1,17 @@
 # Twitter configuration
-CONSUMER_KEY = "e2Hqw5TgDc8EUsA0RmP8XBJMj"
-CONSUMER_SECRET_KEY = "5NxskZP7t46UfI6Gwi5hdrIbJRtX0NDmCEWtT1evAzFuoC3PNj"
-ACCESS_TOKEN = "1345949283745411072-9vmNSqlxRSIPJ61qNVZv6Dko1vLNql"
-ACCESS_TOKEN_SECRET = "KD6cbo7xColK3pps0wV4llYuex3BK8Fa7u1tqyTduxchr"
-SEARS_TWITTER_USERNAME = "searysears"
-SEARS_ID = 610235781608374272
-SEARS_DISCORD_USER_ID = "<@610235781608374272>"
+TWEEPY_CONSUMER_KEY = "e2Hqw5TgDc8EUsA0RmP8XBJMj"
+TWEEPY_CONSUMER_SECRET_KEY = "5NxskZP7t46UfI6Gwi5hdrIbJRtX0NDmCEWtT1evAzFuoC3PNj"
+TWEEPY_ACCESS_TOKEN = "1345949283745411072-9vmNSqlxRSIPJ61qNVZv6Dko1vLNql"
+TWEEPY_ACCESS_TOKEN_SECRET = "KD6cbo7xColK3pps0wV4llYuex3BK8Fa7u1tqyTduxchr"
+TARGET_TWITTER_USERNAME = "searyTARGET"
+TARGET_ID = 610235781608374272
+TARGET_DISCORD_USER_ID = "<@610235781608374272>"
 
 # MongoDB Configuration
-CONNECTION_URL = "mongodb+srv://patrikgerard:faPqJHzR8tARuS@cluster0.qv7sp.mongodb.net/test"
+MONGO_CONNECTION_URL = "mongodb+srv://patrikgerard:faPqJHzR8tARuS@cluster0.qv7sp.mongodb.net/test?ssl=true&ssl_cert_reqs=CERT_NONE"
 
 # Discord Configuration
-TOKEN = "ODU0Mzk4NjY3NDAyMzc5Mjk1.YMjWxA.xxBU0Rwsg_3_m3itIharkFaAT0I"
+TOKEN = "ODU0Mzk4NjY3NDAyMzc5Mjk1.YMjWxA.J4q2DAKNj6x9kfGpAGIznjwjs4U"
 CHANNEL_ID = 854399482350272546
 GUILD_ID = 854399482350272543
 
@@ -28,26 +28,26 @@ CARL_ID = 616262200608292895
 # Video Links
 oh_hi_mark_video = "https://www.youtube.com/watch?v=C-IvV8thrO4"
 
-# Horny choices
-horny_choices = {"is horny.\n": 1, "is not horny.\n": 0, "is aggressively horny.\n": 1, "is in heat.\n": 1, "is threateningly horny.\n":1}
+# Naughty choices
+naughty_choices = {"is naughty.\n": 1, "is not naughty.\n": 0, "is aggressively naughty.\n": 1, "is in heat.\n": 1, "is threateningly naughty.\n":1}
 
 # Times:
-allowed_horny_permit_time = 1800 # 30 minutes
-horny_jail_sentence_time = 2700 # 45 minutes
-horny_check_cooldown = 300 # 5 minutes
+allowed_naughty_permit_time = 1800 # 30 minutes
+naughty_jail_sentence_time = 2700 # 45 minutes
+naughty_check_cooldown = 300 # 5 minutes
 permit_request_cooldown = 1200 # 20 minutes
-horny_strike_cooldown = 3600 # 1 hour
+naughty_strike_cooldown = 3600 # 1 hour
 
-# Horny jail images
-horny_jail_images = [f"https://i.redd.it/dxzh1w27sog41.jpg", f"https://pbs.twimg.com/media/EnhcMHsUwAw0PFy?format=jpg&name=small", f"https://pbs.twimg.com/media/EUkTxaQU4AEA2p-?format=jpg&name=medium"]
-# Horny jail messages
-horny_jail_messages = [f"NO TALKING IN HORNY JAIL", f"DO NOT TALK TO THE NON-SINNERS"]
+# Naughty jail images
+naughty_jail_images = [f"https://i.redd.it/dxzh1w27sog41.jpg", f"https://pbs.twimg.com/media/EnhcMHsUwAw0PFy?format=jpg&name=small", f"https://pbs.twimg.com/media/EUkTxaQU4AEA2p-?format=jpg&name=medium"]
+# Naughty jail messages
+naughty_jail_messages = [f"NO TALKING IN NAUGHTY JAIL", f"DO NOT TALK TO THE NON-SINNERS"]
 
 # Bonk image
 bonk_image = f"https://pbs.twimg.com/media/Eqzk4gKXAAU_Y0c?format=jpg&name=large"
 
 # Hoeny jail role
-horny_jail_role = "In Horny Jail"
+naughty_jail_role = "In Naughty Jail"
 
 # Chances
 permit_request_chance = 25
@@ -72,3 +72,8 @@ join_chance = 40
 join_cooldown = 1200 # 20 minutes
 # Random join file
 r_join_file = "random_join.txt"
+
+
+MONGO_DB = "generic_db"
+MONGO_COLLECTION_USERS = "generic_users"
+MONGO_COLLECTION_TIER_LIST = "generic_tier_list"

@@ -13,27 +13,27 @@ from collections import Counter
 
 
 ### Test Channel Info ###
-# TOKEN = secret_info.TOKEN
-# CHANNEL_ID = secret_info.CHANNEL_ID
-# GUILD_ID = secret_info.GUILD_ID
-# VOICE_CHANNEL = secret_info.test_voice_channel
+TOKEN = secret_info.TOKEN
+CHANNEL_ID = secret_info.CHANNEL_ID
+GUILD_ID = secret_info.GUILD_ID
+VOICE_CHANNEL = secret_info.test_voice_channel
 
 ### Cousin Channel Info ###
-VOICE_CHANNEL = secret_info.cousin_dbd_voice_channel
-TOKEN = secret_info.OJ_TOKEN
-GUILD_ID = secret_info.CUZ_GUILD_ID
-CHANNEL_ID = secret_info.CUZ_CHANNEL_ID
+# VOICE_CHANNEL = secret_info.cousin_dbd_voice_channel
+# TOKEN = secret_info.OJ_TOKEN
+# GUILD_ID = secret_info.CUZ_GUILD_ID
+# CHANNEL_ID = secret_info.CUZ_CHANNEL_ID
 
 
 error_message_bad_command = "Command doesn't fit. You must acquit!"
 error_message_did_something_wrong = "Oh my God, Nicole is killed? Oh my God, she is dead? The errors in your command killed her?"
 
 MARK_ID = secret_info.MARK_ID
-SEARS_ID = secret_info.SEARS_ID
+TARGET_ID = secret_info.TARGET_ID
 PATRICK_ADMIN_ID = secret_info.PATRICK_ADMIN_ID
 CARL_ID = secret_info.CARL_ID
 guilty_message_global = "I'm absolutely, l00 percent, not guilty."
-horny_message_global = "I'm absolutely, l00 percent, not horny."
+naughty_message_global = "I'm absolutely, l00 percent, not naughty."
 carl_quote = f"\"Hey Brian I'm done gassing up and heading out to the place at the other end of passbook just crossed Macgomery Road from Holbrook and just keep on going straight towards a house hot like you're going through Montgomery but on hospital road see\""
 OJ_QUOTES = [f"The day you take complete responsibility for yourself, the day you stop making any excuses, that's the day you start to the top <@{MARK_ID}>.", f"I don\'t understand what I did wrong except live a life that everyone is jealous of."]
 juice_is_loose_link = f"https://ca-times.brightspotcdn.com/dims4/default/f416c0f/2147483647/strip/true/crop/1201x675+0+0/resize/840x472!/quality/90/?url=https%3A%2F%2Fcalifornia-times-brightspot.s3.amazonaws.com%2Fbf%2Fb9%2Fcdb06ac65770f68c6b83ec7214d8%2Fla-1560697015-h8b49fdy31-snap-image"
@@ -45,11 +45,11 @@ calculating_messages = [f"Calculating tier list...", f"Beating my wife...", f"Mu
 oj_mad_link = f"https://cdn.vox-cdn.com/thumbor/fmaJOrr2EQNCj4SECstQ4t7xVa8=/1400x1400/filters:format(jpeg)/cdn.vox-cdn.com/uploads/chorus_asset/file/16108952/oj_simpson_38021484_2.jpg"
 dick_sucker_fact = f"It has been 4 hours since I successfully sucked my own penis. Things are different now. As soon as mouth-to-penis contact was made I felt a shockwave through my body. I have reason to believe I have super strength and telekinesis now.. 3 hours after contact I noticed a van parked on my street but no one has entered or exited the car since its arrival. I fear for my safety, I'm not sure what sort of power I may have stumbled upon but it's possible that the government has found out. If I don't update this again please send help"
 military_spending_link= f"https://media.nationalpriorities.org/uploads/discretionary_spending_pie%2C_2015_enacted.png"
-send_to_horny_jail_message = f"Go to horny jail"
+send_to_naughty_jail_message = f"Go to naughty jail"
 bonk_image = f"https://pbs.twimg.com/media/Eqzk4gKXAAU_Y0c?format=jpg&name=large"
-horny_choices = secret_info.horny_choices
-horny_jail_images = secret_info.horny_jail_images
-horny_jail_sentence_time = secret_info.horny_jail_sentence_time
+naughty_choices = secret_info.naughty_choices
+naughty_jail_images = secret_info.naughty_jail_images
+naughty_jail_sentence_time = secret_info.naughty_jail_sentence_time
 mom_statuses = secret_info.mom_statuses
 forbidden_ids = secret_info.forbidden_ids
 
@@ -60,9 +60,9 @@ JOIN_COOLDOWN = secret_info.join_cooldown
 mp3_files = secret_info.mp3_files
 michael_sounds = secret_info.michael_sounds
 
-# async def free_from_horny_jail(horndog, role, time_to_release):
+# async def free_from_naughty_jail(naughtdog, role, time_to_release):
 #     await asyncio.sleep(time_to_release)
-#     await horndog.remove_roles(role)
+#     await naughtdog.remove_roles(role)
 
 
 def main():
@@ -82,9 +82,9 @@ def main():
         # ctx = await bot.get_context()
         asyncio.create_task(bot_functions.random_join(vchannel, JOIN_CHANCE, JOIN_COOLDOWN))
 
-        #horny_jail_role_ = discord.utils.get(channel.guild.roles, name="Captain Horny")
+        #naughty_jail_role_ = discord.utils.get(channel.guild.roles, name="Captain Naughty")
         #carl = channel.guild.get_member(616262200608292895)
-        #await carl.add_roles(horny_jail_role_)
+        #await carl.add_roles(naughty_jail_role_)
 
 
     @client.event
@@ -95,28 +95,28 @@ def main():
         # channel_to_join = client.get_channel(854399482350272547)
         # print(channel_to_join)
         vchannel = client.get_channel(VOICE_CHANNEL)
-        horny_jail_role = None
+        naughty_jail_role = None
         try:
-            horny_jail_role = discord.utils.get(message.guild.roles, name="In Horny Jail")
+            naughty_jail_role = discord.utils.get(message.guild.roles, name="In Naughty Jail")
         except:
             pass
-        if horny_jail_role != None:
+        if naughty_jail_role != None:
             # Check if the message is from Mark
             if message.author.id == MARK_ID and bot_functions.check_mark_mode() is True:
                 await message.channel.send(f"Oh, hi Mark <@{MARK_ID}>\n{secret_info.oh_hi_mark_video}")
             
-            # Check if the message is from sears
-            if message.author.id == SEARS_ID:
+            # Check if the message is from TARGET
+            if message.author.id == TARGET_ID:
                 mocked_message = bot_functions.mock(message.content.lower())
                 await message.channel.send(mocked_message)
-            # Check if the author is in horny jail
-            if horny_jail_role in message.author.roles:
+            # Check if the author is in naughty jail
+            if naughty_jail_role in message.author.roles:
             # bot_functions.is_in_jail(message.author.id):
-                horny_message = bot_functions.horny_jail_message(message.author.id)
+                naughty_message = bot_functions.naughty_jail_message(message.author.id)
                 downvote_message = f"{bot_functions.downvote_user(downvoted_id=message.author.id)} for being a sinner."
-                horny_message += downvote_message
-                await message.channel.send(horny_message)
-                await message.channel.send(random.choice(horny_jail_images))
+                naughty_message += downvote_message
+                await message.channel.send(naughty_message)
+                await message.channel.send(random.choice(naughty_jail_images))
     
         # !mock command
         if message.content.lower().lower().startswith("!mock"):
@@ -135,18 +135,18 @@ def main():
             except:
                 await message.channel.send(error_message_did_something_wrong)
         
-        # Sears tweet
-        elif message.content.lower().startswith("!sears"):
+        # TARGET tweet
+        elif message.content.lower().startswith("!tweet"):
             try:
-                await message.channel.send(bot_functions.grab_sears_tweet())
+                await message.channel.send(bot_functions.grab_target_tweet())
             except:
                 await message.channel.send(error_message_did_something_wrong)
-        elif "sears" in message.content.lower() and message.author.id != int(client.user.mention[2:-1]):
+        elif "tweet" in message.content.lower() and message.author.id != int(client.user.mention[2:-1]):
             try: 
                 mention_ids = [mention.id for mention in message.mentions]
                 bot_mention_id = int(client.user.mention[2:-1])
                 if bot_mention_id in mention_ids:
-                    await message.channel.send(bot_functions.grab_sears_tweet())
+                    await message.channel.send(bot_functions.grab_target_tweet())
             except:
                 await message.channel.send(error_message_did_something_wrong)
         
@@ -189,11 +189,11 @@ def main():
             try:
                 downvoted_id = message.mentions[0].id
                 downvoter_id = message.author.id
-                # Check for sears
-                # if downvoter_id == SEARS_ID:
-                #     downvote_message = bot_functions.downvote_user(downvoted_id = SEARS_ID)
+                # Check for target
+                # if downvoter_id == target_ID:
+                #     downvote_message = bot_functions.downvote_user(downvoted_id = target_ID)
                 #     await message.channel.send(downvote_message)
-                #     await message.channel.send(f"Go fuck yourself <@{SEARS_ID}>.")
+                #     await message.channel.send(f"Go fuck yourself <@{target_ID}>.")
                 # Downvote and send message
                 if downvoter_id != int(client.user.mention[2:-1]):
                     downvote_message = bot_functions.downvote_user(downvoted_id, downvoter_id, message.mentions[0].name)
@@ -208,10 +208,10 @@ def main():
                 downvoter_id = message.author.id
                 mention_ids = [mention.id for mention in message.mentions]
                 bot_mention_id = int(client.user.mention[2:-1])
-                # if downvoter_id == SEARS_ID:
-                #     downvote_message = bot_functions.downvote_user(downvoted_id = SEARS_ID)
+                # if downvoter_id == target_ID:
+                #     downvote_message = bot_functions.downvote_user(downvoted_id = target_ID)
                 #     await message.channel.send(downvote_message)
-                #     await message.channel.send(f"Go fuck yourself <@{SEARS_ID}>.")
+                #     await message.channel.send(f"Go fuck yourself <@{target_ID}>.")
                 if bot_mention_id in mention_ids and downvoter_id != bot_mention_id:
                     # mentions_map = Counter(mention_ids)
                     # print(mentions_map)
@@ -240,74 +240,64 @@ def main():
                     for curr_id in jailed_ids:
                         await bot_functions.free_from_jail_immediate(message.channel, curr_id)
 
-        elif message.content.lower().startswith("!jail_genesis"):
-            if message.author.id != PATRICK_ADMIN_ID:
-                await message.channel.send(f"You really think you\'re god @<{message.author.id}>?")
-            else:
-                list_ids = [260246978636677121, 258316428657033216, 328667649573781504, 216781924721623041, 141045034358145024, 198228030684921856, 353223013266882570, 616262200608292895, 439295714535669760, 761022613089943622, 414828586470473735, 674008886482698240, 610235781608374272, 775114232542003241, 769423928460312598, 152183100980461568, 681288576805109761 ] 
-                await bot_functions.create_all_horny_info(list_ids, client)
-                # for id_ in list_ids:
-                #     creation_message = bot_functions.create_all_horny_info(list_ids, list_ids)
-                await message.channel.send("horny jail info created")
-
-        # Horny warning
+        # Naughty warning
         elif message.content.lower().startswith("!warning"):
-            horny_warnings = bot_functions.has_horny_warning(message.mentions[0].id)
-            if horny_warnings == 1:
-                await message.channel.send(f"<@{message.mentions[0].id}> has been warned for being too horny.")
+            naughty_warnings = bot_functions.has_naughty_warning(message.mentions[0].id)
+            if naughty_warnings == 1:
+                await message.channel.send(f"<@{message.mentions[0].id}> has been warned for being too naughty.")
             else:
-                await message.channel.send(f"<@{message.mentions[0].id}> has no horny warnings.")
+                await message.channel.send(f"<@{message.mentions[0].id}> has no naughty warnings.")
         elif ("warning" in message.content.lower() or "warned" in message.content.lower()) and message.author.id != int(client.user.mention[2:-1]):
             mention_ids = [mention.id for mention in message.mentions]
             bot_mention_id = int(client.user.mention[2:-1])
             if bot_mention_id in mention_ids:
                 warning_ids = (curr_id for curr_id in mention_ids if curr_id != bot_mention_id)
                 for curr_id in warning_ids:
-                    horny_warnings = bot_functions.has_horny_warning(curr_id)
-                    if horny_warnings == 1:
-                        await message.channel.send(f"<@{curr_id}> has been warned for being too horny.")
+                    naughty_warnings = bot_functions.has_naughty_warning(curr_id)
+                    if naughty_warnings == 1:
+                        await message.channel.send(f"<@{curr_id}> has been warned for being too naughty.")
                     else:
-                        await message.channel.send(f"<@{curr_id}> has no horny warnings.")
-        # horny_strikes
+                        await message.channel.send(f"<@{curr_id}> has no naughty warnings.")
+        # naughty_strikes
         elif message.content.lower().startswith("!strike"):
-            horny_strikes = bot_functions.horny_strikes_count(message.mentions[0].id)
-            if horny_strikes == 1:
-                await message.channel.send(f"<@{message.mentions[0].id}> has {horny_strikes} horny strike.")
+            naughty_strikes = bot_functions.naughty_strikes_count(message.mentions[0].id)
+            if naughty_strikes == 1:
+                await message.channel.send(f"<@{message.mentions[0].id}> has {naughty_strikes} naughty strike.")
             else:
-                await message.channel.send(f"<@{message.mentions[0].id}> has {horny_strikes} horny strikes.")
+                await message.channel.send(f"<@{message.mentions[0].id}> has {naughty_strikes} naughty strikes.")
 
         elif message.content.lower().startswith("!update"):
             await bot_functions.print_update_notes(message.channel)
-        # Horny permit
+        # Naughty permit
         elif message.content.lower().startswith("!permit please"):
-            await bot_functions.give_horny_permit(message.channel, message.author.id)
+            await bot_functions.give_naughty_permit(message.channel, message.author.id)
         elif ("permit" in message.content.lower() and ("please" in message.content.lower() or "pls" in message.content.lower() or "plz" in message.content.lower()) ) and message.author.id != int(client.user.mention[2:-1]):
             mention_ids = [mention.id for mention in message.mentions]
             bot_mention_id = int(client.user.mention[2:-1])
             if bot_mention_id in mention_ids:
-                await bot_functions.give_horny_permit(message.channel, message.author.id)
+                await bot_functions.give_naughty_permit(message.channel, message.author.id)
         
 
-        # horny permit
+        # naughty permit
         elif message.content.lower().startswith("!permit"):
-            horny_permit = bot_functions.has_valid_horny_permit(message.mentions[0].id)
-            if horny_permit == True:
-                await message.channel.send(f"<@{message.mentions[0].id}> has a permit to be horny.")
+            naughty_permit = bot_functions.has_valid_naughty_permit(message.mentions[0].id)
+            if naughty_permit == True:
+                await message.channel.send(f"<@{message.mentions[0].id}> has a permit to be naughty.")
             else:
-                await message.channel.send(f"<@{message.mentions[0].id}> is not permitted to be horny.")
+                await message.channel.send(f"<@{message.mentions[0].id}> is not permitted to be naughty.")
         elif ("permit" in message.content.lower() and ("has" in message.content.lower() or "have" in message.content.lower() or "to be" in message.content.lower())) and message.author.id != int(client.user.mention[2:-1]):
             mention_ids = [mention.id for mention in message.mentions]
             bot_mention_id = int(client.user.mention[2:-1])
             if bot_mention_id in mention_ids:
                 strike_ids = (curr_id for curr_id in mention_ids if curr_id != bot_mention_id)
                 for curr_id in strike_ids:
-                    horny_permit = bot_functions.has_valid_horny_permit(curr_id)
-                    if horny_permit == True:
-                        await message.channel.send(f"<@{curr_id}> has a permit to be horny.")
+                    naughty_permit = bot_functions.has_valid_naughty_permit(curr_id)
+                    if naughty_permit == True:
+                        await message.channel.send(f"<@{curr_id}> has a permit to be naughty.")
                     else:
-                        await message.channel.send(f"<@{curr_id}> is not permitted to be horny.")
+                        await message.channel.send(f"<@{curr_id}> is not permitted to be naughty.")
         
-        # Horny jail
+        # Naughty jail
         elif message.content.lower().startswith("!jail"):
             await bot_functions.print_jail(message.channel)
         elif ("jail" in message.content.lower() and ("whos" in message.content.lower() or "who's" in message.content.lower() or "whose" in message.content.lower() or "who" in message.content.lower())) and message.author.id != int(client.user.mention[2:-1]):
@@ -332,7 +322,8 @@ def main():
                 
                 creation_message = bot_functions.create_user(user_to_create_id, creator_id, name=message.mentions[0].name)
                 await message.channel.send(" " + creation_message)
-            except:
+            except Exception as e:
+                print(e)
                 # user_to_create = message.content()[len("!create"):].strip()
                 await message.channel.send("Who(m) do you want me to create?")
         elif "create" in message.content.lower() and message.author.id != int(client.user.mention[2:-1]):
@@ -378,15 +369,15 @@ def main():
                 except:
                     await message.channel.send(error_message_did_something_wrong)
 
-        # Horniest (horny check)
-        elif ("horniest" in message.content.lower() or "horndog" in message.content.lower() or "horn dog" in message.content.lower())  and message.author.id != int(client.user.mention[2:-1]):
+        # Naughtiest (naughty check)
+        elif ("naughtiest" in message.content.lower() or "naughtdog" in message.content.lower() or "naught dog" in message.content.lower())  and message.author.id != int(client.user.mention[2:-1]):
             try: 
                 members = client.get_guild(GUILD_ID).members
                 final_members = [member for member in members if member.id not in forbidden_ids]
-                chosen_horndog_id, chosen_horndog_name = bot_functions.horny_check(final_members)
-                final_message = bot_functions.horny_quote_generator(chosen_horndog_name)
+                chosen_naughtdog_id, chosen_naughtdog_name = bot_functions.naughty_check(final_members)
+                final_message = bot_functions.naughty_quote_generator(chosen_naughtdog_name)
                 await message.channel.send(final_message)
-                await bot_functions.give_horny_strike_or_warning_or_jail(client.get_channel(CHANNEL_ID), chosen_horndog_id, horny_offender_name=chosen_horndog_name)
+                await bot_functions.give_naughty_strike_or_warning_or_jail(client.get_channel(CHANNEL_ID), chosen_naughtdog_id, naughty_offender_name=chosen_naughtdog_name)
             except TypeError as e:
                 print("all is well:" + str(e))
                 pass
@@ -506,54 +497,54 @@ def main():
             if bot_mention_id in mention_ids:
                 strike_ids = (curr_id for curr_id in mention_ids if curr_id != bot_mention_id)
                 for curr_id in strike_ids:
-                    horny_strikes = bot_functions.horny_strikes_count(curr_id)
-                    if horny_strikes == 1:
-                        await message.channel.send(f"<@{curr_id}> has {horny_strikes} horny strike.")
+                    naughty_strikes = bot_functions.naughty_strikes_count(curr_id)
+                    if naughty_strikes == 1:
+                        await message.channel.send(f"<@{curr_id}> has {naughty_strikes} naughty strike.")
                     else:
-                        await message.channel.send(f"<@{curr_id}> has {horny_strikes} horny strikes.")
-        # Horny Check
-        elif message.content.lower().startswith("!horny"):
+                        await message.channel.send(f"<@{curr_id}> has {naughty_strikes} naughty strikes.")
+        # Naughty Check
+        elif message.content.lower().startswith("!naughty"):
             try:
                 members = client.get_guild(GUILD_ID).members
                 final_members = [member for member in members if member.id not in forbidden_ids]
-                chosen_horndog_id, chosen_horndog_name = bot_functions.horny_check(final_members)
-                final_message = bot_functions.horny_quote_generator(chosen_horndog_name)
+                chosen_naughtdog_id, chosen_naughtdog_name = bot_functions.naughty_check(final_members)
+                final_message = bot_functions.naughty_quote_generator(chosen_naughtdog_name)
                 await message.channel.send(final_message)
-                await bot_functions.give_horny_strike_or_warning_or_jail(client.get_channel(CHANNEL_ID), chosen_horndog_id, horny_offender_name=chosen_horndog_name)
+                await bot_functions.give_naughty_strike_or_warning_or_jail(client.get_channel(CHANNEL_ID), chosen_naughtdog_id, naughty_offender_name=chosen_naughtdog_name)
             except TypeError as e:
                 print("all is well:" + str(e))
                 pass
             except:
                 await message.channel.send(error_message_did_something_wrong)
 
-        elif "horny" in message.content.lower() and ("anyone" in message.content.lower() or "who" in message.content.lower() or "whos" in message.content.lower() or "who\'s" in message.content.lower() or "who is" in message.content.lower() or "whose" in message.content.lower()) and message.author.id != int(client.user.mention[2:-1]):
+        elif "naughty" in message.content.lower() and ("anyone" in message.content.lower() or "who" in message.content.lower() or "whos" in message.content.lower() or "who\'s" in message.content.lower() or "who is" in message.content.lower() or "whose" in message.content.lower()) and message.author.id != int(client.user.mention[2:-1]):
             try:
                 members = client.get_guild(GUILD_ID).members
                 final_members = [member for member in members if member.id not in forbidden_ids]
-                chosen_horndog_id, chosen_horndog_name = bot_functions.horny_check(final_members)
-                final_message = bot_functions.horny_quote_generator(chosen_horndog_name)
+                chosen_naughtdog_id, chosen_naughtdog_name = bot_functions.naughty_check(final_members)
+                final_message = bot_functions.naughty_quote_generator(chosen_naughtdog_name)
                 await message.channel.send(final_message)
-                await bot_functions.give_horny_strike_or_warning_or_jail(client.get_channel(CHANNEL_ID), chosen_horndog_id, horny_offender_name=chosen_horndog_name)
+                await bot_functions.give_naughty_strike_or_warning_or_jail(client.get_channel(CHANNEL_ID), chosen_naughtdog_id, naughty_offender_name=chosen_naughtdog_name)
             except TypeError as e:
                 print("all is well:" + str(e))
                 pass
             except:
                 await message.channel.send(error_message_did_something_wrong)
-        elif "horny" in message.content.lower() and message.author.id != int(client.user.mention[2:-1]):
+        elif "naughty" in message.content.lower() and message.author.id != int(client.user.mention[2:-1]):
             mention_ids = [mention.id for mention in message.mentions]
             bot_mention_id = int(client.user.mention[2:-1])
             if bot_mention_id in mention_ids:
                 if len(message.mentions) == 1:
-                    await message.channel.send(horny_message_global)
+                    await message.channel.send(naughty_message_global)
                 else:
-                    horny_ids_not_oj = [mention_id for mention_id in mention_ids if mention_id != bot_mention_id]
-                    for horny_id in horny_ids_not_oj:
-                        is_horny_or_not = bot_functions.is_horny()
-                        horny_name = message.guild.get_member(horny_id).name
-                        horny_message = f"**{horny_name}** {is_horny_or_not}"
-                        await message.channel.send(horny_message)
-                        if horny_choices.get(is_horny_or_not, 0) == 1:
-                            await bot_functions.give_horny_strike_or_warning_or_jail(client.get_channel(CHANNEL_ID), horny_id, horny_offender_name=horny_name)                         
+                    naughty_ids_not_oj = [mention_id for mention_id in mention_ids if mention_id != bot_mention_id]
+                    for naughty_id in naughty_ids_not_oj:
+                        is_naughty_or_not = bot_functions.is_naughty()
+                        naughty_name = message.guild.get_member(naughty_id).name
+                        naughty_message = f"**{naughty_name}** {is_naughty_or_not}"
+                        await message.channel.send(naughty_message)
+                        if naughty_choices.get(is_naughty_or_not, 0) == 1:
+                            await bot_functions.give_naughty_strike_or_warning_or_jail(client.get_channel(CHANNEL_ID), naughty_id, naughty_offender_name=naughty_name)                         
 
     
 
@@ -725,7 +716,7 @@ def main():
                 await message.channel.send(error_message_did_something_wrong)
         elif message.content.lower().startswith("!joke"):
             try:
-                joke_message = f"<@{SEARS_ID}>"
+                joke_message = f"<@{TARGET_ID}>"
                 await message.channel.send(joke_message)
             except:
                 await message.channel.send(error_message_did_something_wrong)
@@ -734,7 +725,7 @@ def main():
                 mention_ids = [mention.id for mention in message.mentions]
                 bot_mention_id = int(client.user.mention[2:-1])
                 if bot_mention_id in mention_ids and len(mention_ids) == 1:
-                    joke_message = f"<@{SEARS_ID}>"
+                    joke_message = f"<@{TARGET_ID}>"
                     await message.channel.send(joke_message)
             except:
                 await message.channel.send(error_message_did_something_wrong)
