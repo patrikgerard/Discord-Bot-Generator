@@ -35,7 +35,7 @@ MONGO_COLLECTION_TIER_LIST = secret_info.MONGO_COLLECTION_TIER_LIST
 
 
 # Information file
-INFORMATION_FILE_NAME ="information.txt"
+INFORMATION_FILE_NAME ="info/information.txt"
 
 # Used for time calculations
 epoch = datetime(1970,1,1)
@@ -44,10 +44,10 @@ epoch = datetime(1970,1,1)
 vote_refresh_time = 180 # 3 minutes
 
 # Help, update, intro, and bee facts documents
-help_doc = "help.txt"
-update_doc = "update_notes.txt"
-intro_doc = "introduction.txt"
-bee_facts_txt = "bee_facts.txt"
+help_doc = "info/help.txt"
+update_doc = "info/update_notes.txt"
+intro_doc = "info/introduction.txt"
+bee_facts_txt = "info/bee_facts.txt"
 
 # Naughty jail oonfig
 allowed_naughty_permit_time = secret_info.allowed_naughty_permit_time # one hour

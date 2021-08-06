@@ -1,0 +1,21 @@
+ᴍʏ ᴄᴏᴍᴍᴀɴᴅꜱ:
+**!mock [message]**: Mock a message
+**!target**: See a tweet by <@610235781608374272>
+**!dogs**: Get a cool dog fact!
+**!create @user**: Add someone (using their slack handle) to the tier list
+**!upvote @user**: Add to someone's tier list points
+**!downvote @user**: Subtract from someone's tier list points
+**!tiers**: View the cousin tier list
+**!carl**: Get a certain carl quote
+**!naughty**: naughty check
+**!guilty**: Ask if I'm guilty 
+**!glove**: Ask me about my glove
+**!stop**: Tell me to stop
+**!bees**: Bee fact!
+**!joke**: Tell a joke
+**!warning @user**: Check if a user has been warned for being too naughty
+**!strike @user**: See how many naughty strikes a user has
+**!permit @user**: See if a user has a permit to be this naughty
+**!permit please**: See if bot will give you a naughty permit lasting **30 minutes** [25% chance and 20 minute cooldown]
+**!jail**: See who is in naughty jail
+**@BOT_NAME how is @user's mom**: See how someone's mother is doing
