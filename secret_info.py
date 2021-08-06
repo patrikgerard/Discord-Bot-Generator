@@ -64,8 +64,7 @@ cousin_dbd_voice_channel = 775114124513771576
 
 # MP3 Clips
 mp3_files = ["mp3_files/hey_twitter_world_this_is_yours_truly.mp3", "mp3_files/oj_is_riled_up.mp3", "mp3_files/did_not_do_it.mp3", "mp3_files/oj_blood_pressure_going.mp3", "mp3_files/oj_got_screwed.mp3", "mp3_files/ojs_kids_no_mother.mp3", "mp3_files/ojs_kids_no_mother.mp3", "mp3_files/getting_even.mp3", "mp3_files/loaded_with_talent.mp3", "mp3_files/fun_teasing_you.mp3", "mp3_files/um_uh.mp3", "mp3_files/hypothetical_cap_and_gloves.mp3"]
-# mp3_files = ["mp3_files/hypothetical_cap_and_gloves.mp3"]
-michael_sounds = ["mp3_files/michael_hee_hee.mp3","mp3_files/michael_shamone.mp3"] 
+your_sounds = ["mp3_files/michael_hee_hee.mp3","mp3_files/michael_shamone.mp3"] 
 # Join Chance
 join_chance = 40
 # Join cooldown
