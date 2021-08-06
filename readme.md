@@ -27,4 +27,6 @@ Install:
     - https://realpython.com/twitter-bot-python-tweepy/
  - Add mp3 files and other miscellaneous info (ensure that all of secret_info.py is filled)
 
- 
+ - More information here: 
+    https://patrickgerard.co/projects/discord-bot
+
