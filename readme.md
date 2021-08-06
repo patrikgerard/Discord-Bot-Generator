@@ -10,7 +10,8 @@ Some cool things it can do:
 
 Install:
  - Use pip to install the necessary packages ("necessary_packages.txt")
- - Set up a mongodb account and collection -- documentation here: https://www.mongodb.com/blog/post/getting-started-with-python-and-mongodb
+ - Set up a mongodb account and collection: 
+    - https://www.mongodb.com/blog/post/getting-started-with-python-and-mongodb
     - Connect the mongodb account to the bot by inputting the necessary info in secret_info.py:
         1.  MONGO_CONNECTION_URL
         2.  MONGO_DB
@@ -28,5 +29,5 @@ Install:
  - Add mp3 files and other miscellaneous info (ensure that all of secret_info.py is filled)
 
  - More information here: 
-    https://patrickgerard.co/projects/discord-bot
+    - https://patrickgerard.co/projects/discord-bot
 
